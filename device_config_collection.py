@@ -101,6 +101,7 @@ def main():
             # save the configuration file and path defined
             with open(filename_path, 'w') as filehandle:
                 filehandle.write('%s\n' % config_str)
+                print('Saved configuration file with the name: ', filename_path)
         except:
             pass
 
