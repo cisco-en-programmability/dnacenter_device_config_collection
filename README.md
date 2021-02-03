@@ -20,7 +20,7 @@ It will create a report with the hostname and platform id for these devices
 
 This application will:
 - create an inventory of all devices managed by Cisco DNA Center
-- make a folder to save the device configuration files to
+- verify if folder exists, or create the folder to save the device configuration files to
 - collect the running configuration for each device
 - save each configuration to a file using the name {device_hostname}, in the folder {FOLDER_NAME}
 
