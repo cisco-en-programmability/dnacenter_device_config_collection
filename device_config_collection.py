@@ -50,8 +50,9 @@ def main():
     """
     This application will:
      - create an inventory of all devices managed by Cisco DNA Center
+     - make a folder to save the device configuration files to
      - collect the running configuration for each device
-     - save each configuration in a file using the name {device_hostname + time when config saved}
+     - save each configuration to a file using the name {device_hostname}, in the folder {FOLDER_NAME}
     """
 
     # logging, debug level, to file {application_run.log}
@@ -77,7 +78,7 @@ def main():
     device_offset = 1
     device_limit = 500
     while remaining_device_count > 0:
-        device_info = dnac_api.devices.get_device_list(offset=device_offset,limit=device_limit)
+        device_info = dnac_api.devices.get_device_list(offset=device_offset, limit=device_limit)
         devices_list.extend(device_info['response'])
         device_offset += device_limit
         remaining_device_count -= device_limit
@@ -91,10 +92,14 @@ def main():
         device_hostname = device['hostname']
         device_id = device['id']
 
-        filename = FOLDER_NAME + '/' + device_hostname
+        filename_path = FOLDER_NAME + '/' + device_hostname
         try:
+            # not all Cisco DNA Center devices have a configuration file, for example AP's
+            # attempting to read the configuraiton file will create an error
             config_str = dnac_api.devices.get_device_config_by_id(device_id)['response']
-            with open(filename, 'w') as filehandle:
+
+            # save the configuration file and path defined
+            with open(filename_path, 'w') as filehandle:
                 filehandle.write('%s\n' % config_str)
         except:
             pass
